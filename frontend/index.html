@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Prediction AI - Advanced ML Forecasting System</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-content">
+            <div class="logo"><i class="ph ph-chart-polar"></i> Sales Prediction AI</div>
+            <div class="header-controls">
+                <div id="apiStatus" class="status-badge">
+                    <i class="ph ph-spinner"></i> Checking...
+                </div>
+                <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle Dark Mode">
+                    <i class="ph ph-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <!-- MAIN WRAPPER -->
+    <div class="wrapper">
+        <!-- LEFT COLUMN: SINGLE PREDICTION -->
+        <div class="container">
+            <h2 class="container-title"><i class="ph ph-magic-wand"></i> Sales Prediction</h2>
+            <p class="container-subtitle">Use AI to forecast unit sales with Random Forest</p>
+
+            <div class="info-box">
+                <i class="ph ph-info"></i>
+                <span>Enter product details for accurate predictions based on advanced machine learning</span>
+            </div>
+
+
+
+            <!-- SINGLE PREDICTION FORM -->
+            <div id="singleTab">
+                <form id="predictionForm">
+                    <div class="form-group">
+                        <label for="category"><i class="ph ph-tag"></i> Product Category</label>
+                        <select id="category" required>
+                            <option value="">-- Select Category --</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Fashion">Fashion & Clothing</option>
+                            <option value="Home Decor">Home Decor</option>
+                            <option value="Sports">Sports & Recreation</option>
+                            <option value="Toys">Toys & Gifts</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price"><i class="ph ph-currency-dollar"></i> Product Price ($)</label>
+                        <input type="number" id="price" min="0" step="0.01" placeholder="e.g., 500" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="discount"><i class="ph ph-percent"></i> Discount Percentage (%)</label>
+                        <input type="number" id="discount" min="0" max="100" step="0.01" placeholder="e.g., 10"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="segment"><i class="ph ph-users"></i> Customer Segment</label>
+                        <select id="segment" required>
+                            <option value="">-- Select Segment --</option>
+                            <option value="Premium">Premium</option>
+                            <option value="Regular">Regular</option>
+                            <option value="Occasional">Occasional</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="marketing"><i class="ph ph-megaphone"></i> Marketing Budget ($)</label>
+                        <input type="number" id="marketing" min="0" step="0.01" placeholder="e.g., 1000" required>
+                    </div>
+
+
+
+                    <div class="button-group">
+                        <button type="submit" class="btn-predict"><i class="ph ph-crystal-ball"></i> Predict
+                            Sales</button>
+                        <button type="reset" class="btn-clear"><i class="ph ph-arrow-counter-clockwise"></i>
+                            Reset</button>
+                    </div>
+                </form>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Generating prediction...</p>
+                </div>
+
+                <div class="result" id="result"></div>
+            </div>
+
+
+        </div>
+
+        <!-- RIGHT COLUMN: HISTORY & STATS -->
+        <div class="container">
+            <h2 class="container-title">📊 Statistics & History</h2>
+            <p class="container-subtitle">View predictions and performance metrics</p>
+
+            <!-- STATS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Predictions</div>
+                    <div class="stat-value" id="totalPredictions">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Last Update</div>
+                    <div class="stat-value" style="font-size: 14px;" id="lastUpdate">-</div>
+                </div>
+            </div>
+
+            <!-- HISTORY SECTION -->
+            <div style="margin-top: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 class="chart-title"><i class="ph ph-clock-counter-clockwise"></i> Prediction History</h3>
+                    <button id="clearHistoryBtn" class="btn-small"><i class="ph ph-trash"></i> Clear</button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <p style="text-align: center; color: #999;">No predictions yet</p>
+                </div>
+            </div>
+
+            <!-- EXPORT SECTION -->
+            <div style="margin-top: 20px;">
+                <button onclick="exportHistory()" class="btn-small" style="width: 100%;"><i
+                        class="ph ph-download-simple"></i> Download Report</button>
+            </div>
+
+            <!-- INFO -->
+            <div class="info-box" style="margin-top: 20px;">
+                <i class="ph ph-lightbulb"></i>
+                <span>History is saved automatically. Download reports in CSV format anytime.</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

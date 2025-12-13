@@ -3,7 +3,10 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import joblib
 import os
@@ -20,7 +23,9 @@ def train_model():
     """Train units prediction model using Random Forest"""
     
     logger.info("="*50)
-    logger.info("Starting Model Training (Random Forest)")
+    logger.info("="*50)
+    logger.info("Starting Model Training (Linear Regression - Revenue Target)")
+    logger.info("="*50)
     logger.info("="*50)
     
     # Load dataset
@@ -49,17 +54,20 @@ def train_model():
     # Feature Engineering - Create Effective Price
     df['Effective_Price'] = df['Price'] * (1 - df['Discount'] / 100)
     
-    # Features & Target (from Airbnb notebook)
+    # Calculate Revenue (Target)
+    df['Revenue'] = df['Effective_Price'] * df['Units_Sold']
+    
+    # Features & Target
     X = df[['Effective_Price', 'Discount', 'Marketing_Spend', 'Day', 'Month']]
-    y = df['Units_Sold']
+    y = df['Revenue']
     
     # Split data
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     logger.info(f"Train set: {X_train.shape[0]} | Test set: {X_test.shape[0]}")
     
-    # Train model - Random Forest (from Airbnb_Project.ipynb)
-    logger.info("Training Random Forest model (n_estimators=300)...")
-    model = RandomForestRegressor(n_estimators=300, random_state=42)
+    # Train model - Linear Regression (Requested by user)
+    logger.info("Training Linear Regression model...")
+    model = LinearRegression()
     model.fit(X_train, y_train)
     
     # Evaluate
