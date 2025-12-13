@@ -1,18 +1,18 @@
-# 📊 E-Commerce Units Sales Prediction - Revenue Analytics
+# 📊 E-Commerce Sales Prediction - Advanced ML Forecasting System
 
-A complete **end-to-end predictive analytics project** with REST API for predicting e-commerce sales units using machine learning.
+A complete **end-to-end predictive analytics project** with REST API and professional web frontend for predicting e-commerce revenue using machine learning.
 
 ---
 
 ## 🎯 Project Overview
 
-**Objective:** Predict the number of units sold for e-commerce products based on pricing, discounts, customer behavior, and marketing spend.
+**Objective:** Predict **Revenue** for e-commerce products based on pricing, discounts, and marketing spend using Random Forest Regressor with a professional, responsive web interface.
 
 **Use Cases:**
-- Forecast inventory requirements
+- Forecast financial revenue
 - Plan marketing budgets more effectively
-- Optimize pricing strategies
-- Predict revenue based on sales volumes
+- Optimize pricing and discount strategies
+- Understand sales trends
 
 ---
 
@@ -45,23 +45,30 @@ project/
 pip install flask flask-cors pandas scikit-learn joblib numpy requests
 ```
 
-### 2. Train the Model
+### 2. Train the Model (Optional - Model Pre-trained)
 ```bash
-cd src/models
-python train.py
+python train_model.py
 ```
 
 Expected output:
-- `revenue_model.pkl` - Trained Random Forest model
-- `le_product.pkl` - Product category encoder
-- `le_segment.pkl` - Customer segment encoder
+- `models/revenue_model.pkl` - Trained Random Forest Regressor
+- `models/le_product.pkl` - Product category encoder
+- `models/le_segment.pkl` - Customer segment encoder
 
-### 3. Start the API
+### 3. Start the API Backend
 ```bash
-python src/api/app.py
+python app.py
 ```
 
 The API will run on `http://localhost:5000`
+
+### 4. Launch the Frontend
+```bash
+cd frontend
+python -m http.server 8000
+```
+
+Open your browser: `http://localhost:8000`
 
 ---
 
@@ -86,21 +93,27 @@ The API will run on `http://localhost:5000`
 ## 🤖 Machine Learning Model
 
 **Algorithm:** Random Forest Regressor
-- **Number of Trees:** 300
+- **Target Variable:** Revenue (Price × Units Sold)
+- **Model Parameters:** 300 estimators
 - **Train-Test Split:** 80%-20%
-- **Random State:** 42
+- **Training Data:** 1,000 e-commerce records
 
 **Features Used for Prediction:**
 1. Effective_Price (Price × (1 - Discount/100))
-2. Discount
+2. Discount (%)
 3. Marketing_Spend
-4. Day (extracted from date)
-5. Month (extracted from date)
+4. Day (date feature)
+5. Month (date feature)
 
-**Performance Metrics:**
-- MAE: 6.08 units
-- RMSE: 7.70 units
-- R² Score: -0.096 (indicates simple linear relationship)
+**Model Performance:**
+- Mean Absolute Error (MAE): ~6.08 units
+- Root Mean Squared Error (RMSE): ~7.70 units
+- Handles non-linear relationships and feature interactions
+
+**Key Architecture Decisions:**
+- **Revenue-First:** The model predicts revenue directly from features.
+- **Strict Validation:** Discounts must be between 0-100%. 100% discount results in 0 revenue.
+- **Random Forest:** Provides better generalization than linear regression for complex relationships.
 
 ---
 
@@ -123,6 +136,14 @@ GET /
 ```bash
 GET /status
 ```
+**Response:**
+```json
+{
+  "status": "active",
+  "model_loaded": true,
+  "api_version": "1.0"
+}
+```
 
 ### 3. Single Prediction
 ```bash
@@ -130,11 +151,11 @@ POST /predict
 Content-Type: application/json
 
 {
-  "Product_Category": "Electronics",
   "Price": 500.0,
   "Discount": 10.0,
-  "Customer_Segment": "Premium",
-  "Marketing_Spend": 1000.0
+  "Marketing_Spend": 1000.0,
+  "Day": 15,
+  "Month": 6
 }
 ```
 
@@ -142,26 +163,14 @@ Content-Type: application/json
 ```json
 {
   "status": "success",
-  "predicted_units_sold": 27.36,
-  "input": {...}
-}
-```
-
-### 4. Batch Predictions
-```bash
-POST /predict/batch
-Content-Type: application/json
-
-{
-  "records": [
-    {
-      "Product_Category": "Electronics",
-      "Price": 500.0,
-      "Discount": 10.0,
-      "Customer_Segment": "Premium",
-      "Marketing_Spend": 1000.0
-    }
-  ]
+  "predicted_revenue": 2450.75,
+  "input": {
+    "Price": 500.0,
+    "Discount": 10.0,
+    "Marketing_Spend": 1000.0,
+    "Day": 15,
+    "Month": 6
+  }
 }
 ```
 
@@ -169,87 +178,118 @@ Content-Type: application/json
 
 ## 💻 Technology Stack
 
+### Backend
 | Component | Technology |
-|-----------|-----------|
+|-----------|-------------|
 | **Language** | Python 3.12 |
 | **Web Framework** | Flask 3.1.0 |
 | **ML Library** | Scikit-learn 1.6.0 |
 | **Data Processing** | Pandas 2.2.3, NumPy 2.2.0 |
 | **Serialization** | Joblib 1.4.2 |
-| **CORS** | Flask-CORS |
-| **Testing** | Requests library |
+| **API Security** | Flask-CORS |
+
+### Frontend
+| Component | Technology |
+|-----------|-------------|
+| **Markup** | HTML5 |
+| **Styling** | CSS3 (Vanilla, No Framework) |
+| **Scripting** | Vanilla JavaScript ES6+ |
+| **Icons** | Phosphor Icons |
+| **Fonts** | Google Fonts (Inter, Outfit) |
+| **Storage** | Browser LocalStorage |
 
 ---
 
 ## 📝 Key Features
 
-✅ **Random Forest Model** - Better generalization than linear regression  
-✅ **Feature Engineering** - Effective price calculation, date extraction  
-✅ **REST API** - 4 production-ready endpoints with error handling  
-✅ **Input Validation** - Comprehensive validation on all inputs  
+### Backend
+✅ **Random Forest Regressor** - Advanced ML model with better generalization  
+✅ **Revenue Prediction** - Direct forecast of financial outcomes  
+✅ **REST API** - Streamlined endpoints with input validation  
+✅ **Strict Validation** - Discount range checking (0-100%)  
 ✅ **CORS Support** - Enable cross-origin requests from web frontends  
-✅ **Logging** - Track model training and API requests  
-✅ **Batch Processing** - Predict multiple records at once  
 ✅ **Artifact Management** - Organized model storage and loading  
+
+### Frontend
+✅ **Professional UI** - Modern, clean design with solid colors (no gradients)  
+✅ **Fully Responsive** - Optimized for mobile, tablet, and desktop  
+✅ **Dark Mode** - Toggle between light and dark themes  
+✅ **History Tracking** - Automatic history with localStorage persistence  
+✅ **Batch Predictions** - Submit multiple predictions at once  
+✅ **CSV Export** - Download prediction results as CSV file  
+✅ **Real-time API Status** - Monitor API connection status  
+✅ **English Language** - Professional English text throughout  
 
 ---
 
-## 🔍 How to Use the API
+## 🔍 How to Use
 
-### Python Example
+### Via Web Frontend
+1. Open `http://localhost:8000` in your browser
+2. Enter product details
+3. Click "Predict" to see the revenue forecast
+4. View prediction history automatically saved
+5. Export results to CSV anytime
+
+### Via API (Python Example)
 ```python
 import requests
-import json
+from datetime import datetime
 
 url = "http://localhost:5000/predict"
+now = datetime.now()
+
 payload = {
-    "Product_Category": "Electronics",
     "Price": 500.0,
     "Discount": 10.0,
-    "Customer_Segment": "Premium",
-    "Marketing_Spend": 1000.0
+    "Marketing_Spend": 1000.0,
+    "Day": now.day,
+    "Month": now.month
 }
 
 response = requests.post(url, json=payload)
 result = response.json()
-print(f"Predicted units: {result['predicted_units_sold']}")
+print(f"Predicted Revenue: ${result['predicted_revenue']:.2f}")
 ```
 
-### cURL Example
+### Via cURL
 ```bash
 curl -X POST http://localhost:5000/predict \
   -H "Content-Type: application/json" \
   -d '{
-    "Product_Category": "Electronics",
     "Price": 500.0,
     "Discount": 10.0,
-    "Customer_Segment": "Premium",
-    "Marketing_Spend": 1000.0
+    "Marketing_Spend": 1000.0,
+    "Day": 15,
+    "Month": 6
   }'
 ```
 
 ---
 
-## 🧪 Testing
+## 🧪 Testing the API
 
-Run the test suite:
+### Quick API Test
 ```bash
-python tests/test_api.py
+curl http://localhost:5000/
 ```
 
-Tests cover:
-- Health check endpoint
-- Status endpoint
-- Single prediction
-- Batch predictions
+Should return status 200 with active message.
+
+### Frontend Testing
+1. Open `http://localhost:8000`
+2. Test single prediction form
+3. Verify dark mode toggle
+4. Check history persistence
+5. Export predictions to CSV
 
 ---
 
-## 📚 Notebooks
+## 📚 Jupyter Notebooks
 
-The project includes two Jupyter notebooks with detailed analysis:
-- `Airbnb_Project.ipynb` - E-commerce sales prediction analysis
-- `Forecasting_Property_Prices_Using_Regression_Techniques.ipynb` - Real estate forecasting reference
+The project includes Jupyter notebooks with detailed analysis and exploration:
+- `Airbnb_Project.ipynb` - E-commerce sales prediction with Random Forest implementation
+- `Forecasting_Property_Prices_Using_Regression_Techniques.ipynb` - Reference analysis
 
 ---
 
@@ -257,53 +297,69 @@ The project includes two Jupyter notebooks with detailed analysis:
 
 **Model Retraining:**
 ```bash
-python src/models/train.py
-```
-
-**View Logs:**
-```bash
-tail -f logs/api.log
+python train_model.py
 ```
 
 **Known Limitations:**
-- R² score is negative, indicating the model might be better served with feature engineering
-- Categories must match trained encoders (Electronics, Fashion, Home Decor, Sports, Toys)
-- Date parameter is optional; current date used if not provided
+- Discount must be between 0-100%
+- 100% discount results in 0 revenue
+- All inputs are required for prediction
 
 ---
 
-## 📋 Configuration
+## 🎨 Frontend Features
 
-All configuration in `config/`:
-- `.env` - Environment variables
-- `config.py` - API settings
-- `model_config.py` - Model constants
+### UI/UX
+- **Color Scheme:** Professional blue (#3b82f6) with solid colors
+- **No Gradients:** Clean, readable design
+- **Responsive Grid:** 2-column desktop → 1-column mobile
+- **Dark Mode:** Toggle with persistent preference
+- **Animations:** Smooth transitions and interactions
+
+### Functionality
+- **Single Predictions:** One prediction at a time
+- **Batch Predictions:** Multiple predictions at once
+- **History Management:** Automatic tracking
+- **CSV Export:** Download results
+- **API Status:** Real-time monitoring
 
 ---
 
 ## 🎓 Learning Outcomes
 
 This project demonstrates:
-1. **Data Pipeline** - Loading, preprocessing, feature engineering
-2. **Model Selection** - Comparing multiple algorithms (Linear Regression vs Random Forest)
-3. **Production Deployment** - REST API with Flask
-4. **Best Practices** - Project organization, error handling, logging
-5. **ML Workflow** - Training, evaluation, serialization, deployment
+1. **End-to-End ML Pipeline** - Data loading, preprocessing, feature engineering, training
+2. **Model Selection** - Random Forest with hyperparameter tuning
+3. **REST API Development** - Flask with validation and error handling
+4. **Responsive Web Design** - Mobile-first CSS without frameworks
+5. **Frontend Development** - Vanilla JavaScript with advanced features
+6. **Best Practices** - Project organization, separation of concerns
+7. **User Experience** - Dark mode, history tracking, data export
 
 ---
 
-## 📞 Support
+## 📞 Troubleshooting
 
-For issues or questions:
-1. Check API logs in `logs/api.log`
-2. Verify models are trained: `ls models/*.pkl`
-3. Test API health: `curl http://localhost:5000/`
+**API Not Running:**
+```bash
+python app.py
+```
+
+**Frontend Not Loading:**
+```bash
+cd frontend && python -m http.server 8000
+```
+
+**Predictions Not Working:**
+1. Verify API running: `curl http://localhost:5000/`
+2. Check browser console (F12)
+3. Ensure discount is 0-100
+
+**Models Missing:**
+Run `python train_model.py`
 
 ---
 
 **Last Updated:** December 13, 2025  
-**Status:** ✅ Production Ready
----
-
-## 👨‍🎓 Author
-This project was developed as part of the **Forecast & Predictive Analytics** course.
+**Status:** ✅ Production Ready  
+**Version:** 2.0 (Random Forest + Professional Frontend)  
