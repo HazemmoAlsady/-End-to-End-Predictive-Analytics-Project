@@ -40,14 +40,14 @@ logs/
 
 # Data
 data/processed/
-*.csv
+# *.csv
 
 # Models (keep tracked but ignore large ones)
 models/*.pkl
 
 # Jupyter Notebook
 .ipynb_checkpoints/
-*.ipynb
+# *.ipynb
 
 # Environment
 .env
