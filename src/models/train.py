@@ -30,7 +30,7 @@ def train_model():
     
     # Load dataset
     logger.info("Loading dataset...")
-    data_path = os.path.join(os.path.dirname(__file__), '../../data/raw/Ecommerce_Sales_Prediction_Dataset.csv')
+    data_path = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'Ecommerce_Sales_Prediction_Dataset.csv')
     df = pd.read_csv(data_path)
     logger.info(f"Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
     
@@ -82,7 +82,7 @@ def train_model():
     
     # Save artifacts
     logger.info("Saving model artifacts...")
-    model_dir = os.path.join(os.path.dirname(__file__), '../../models')
+    model_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'models')
     os.makedirs(model_dir, exist_ok=True)
     
     joblib.dump(model, os.path.join(model_dir, 'revenue_model.pkl'))
